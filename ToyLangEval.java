@@ -15,7 +15,7 @@ public class ToyLangEval {
     public void startRead(Scanner fileText) {
         // Checks if the input scanner has another line to be read.
         while (fileText.hasNextLine()) {
-            ToyLangEval(fileText.nextLine());
+            ToyEvalLang(fileText.nextLine());
             declareVar();
         }
     }
@@ -50,7 +50,7 @@ public class ToyLangEval {
         }
     }
 
-    void ToyLangEval(String s) {
+    void ToyEvalLang(String s) {
         this.s = s.replaceAll("\\s", ""); // Removes all empty spaces inside the string.
         currIdx = 0;
         nxtToken();
