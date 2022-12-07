@@ -176,7 +176,7 @@ public class ToyLangEval {
     public static void main(String[] args) throws FileNotFoundException {
 
             // Stores file path into a variable; change pathname to point to file where text to evaluate is stored
-            File f = new File("/Users/bryantbardales/Desktop/GitHub/Toy-Lang-CISC3160/input5.txt");
+            File f = new File("input1.txt");
 
             // Exception for when file is not entered by user or the file doesn't exist
             if(!f.exists()){
