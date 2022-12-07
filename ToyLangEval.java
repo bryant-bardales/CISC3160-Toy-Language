@@ -1,6 +1,8 @@
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.io.File;
 
 public class ToyLangEval {
 
@@ -89,4 +91,106 @@ public class ToyLangEval {
         return x;
     }
 
+    // The function will run if there is more than one line meaning more than one
+    // assignment declaration
+    int factor() {
+        int x = 0;
+        String temp = String.valueOf(inputToken);
+
+        if (hMap.containsKey(temp)) {
+            x = hMap.get(temp).intValue();
+            nxtToken();
+            return x;
+        } else if (inputToken == '(') {
+            nxtToken();
+            x = addOrSubtract();
+            checkParenth(')');
+            return x;
+        } else if (inputToken == '-') {
+            nxtToken();
+            x = factor();
+            return -x;
+        } else if (inputToken == '+') {
+            nxtToken();
+            x = factor();
+            return x;
+        } else if (inputToken == '0') {
+            nxtToken();
+            if (Character.isDigit(inputToken))
+                throw new RuntimeException("Invalid value");
+            return 0;
+        }
+        temp = "";
+
+        while (Character.isDigit(inputToken)) {
+            temp += inputToken;
+            nxtToken();
+        }
+
+        return Integer.parseInt(temp);
+
+    }
+
+    // Identifies the initialization of a variable and returns the value of the
+    // variable
+    String iD() {
+        StringBuilder sB = new StringBuilder();
+
+        if (Character.isLetter(inputToken))
+            sB.append(inputToken);
+        else
+            throw new RuntimeException("Invalid variable name");
+        nxtToken(); // Gets the next token after the variable which should be (=)
+
+        while (Character.isLetter(inputToken) || inputToken == '_' || Character.isDigit(inputToken)) {
+            sB.append(inputToken);
+            nxtToken();
+        }
+        if (inputToken != '=')
+            throw new RuntimeException("Not an valid assignment statement");
+        nxtToken(); // Moves the token after the (=), over to the operand
+        return sB.toString(); // Returns the first variable to string 'var'
+    }
+
+    // Computes the operation
+    static int compute(char op, int x, int y) {
+        int z = 0;
+        switch (op) {
+            case '+':
+                z = x + y;
+                break;
+            case '-':
+                z = x - y;
+                break;
+            case '*':
+                z = x * y;
+                break;
+            case '/':
+                z = x / y;
+                break;
+        }
+        return z;
+    }
+
+    // Main method that evaluates and interpretes the language
+    public static void main(String[] args) throws FileNotFoundException {
+
+            // Stores file path into a variable; change pathname to point to file where text to evaluate is stored
+            File f = new File("/Users/bryantbardales/Desktop/GitHub/Toy-Lang-CISC3160/input5.txt");
+
+            // Exception for when file is not entered by user or the file doesn't exist
+            if(!f.exists()){
+            throw new FileNotFoundException("File not found");
+
+            }
+            else {
+            // Creates a scanner object and takes the file the user provides into the scanner-object
+            Scanner scn = new Scanner(new FileInputStream(f));
+
+            // Creates an object for the Evaluator class
+            ToyLangEval Evaluator = new ToyLangEval();
+            Evaluator.startRead(scn);
+        }
+    }
 }
+
